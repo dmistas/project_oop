@@ -8,7 +8,7 @@ class Database
     private function __construct()
     {
         try {
-            $this->pdo = new PDO("mysql:host=localhost;dbname=project", "root", "");
+            $this->pdo = new PDO("mysql:host=" . Config::getConfigItem('mysql.host') . ";dbname=" . Config::getConfigItem('mysql.database'), Config::getConfigItem('mysql.username'), Config::getConfigItem('mysql.password'));
         } catch (PDOException $exception) {
             echo "Невозможно установить соединение с БД" . $exception->getMessage();
         }
@@ -67,23 +67,23 @@ class Database
     public function insert($table, $fields = [])
     {
         $values = '';
-        foreach ($fields as $item){
+        foreach ($fields as $item) {
             $values .= "?,";
         }
-        $sql = "INSERT INTO {$table} (`" . implode('`, `', array_keys($fields)) . "`) VALUES (". rtrim($values, ",") . ")";
+        $sql = "INSERT INTO {$table} (`" . implode('`, `', array_keys($fields)) . "`) VALUES (" . rtrim($values, ",") . ")";
 
-        if (!$this->query($sql, $fields)){
+        if (!$this->query($sql, $fields)->error()) {
             return true;
         }
         return false;
     }
 
-    public function update($table, $id, $fields=[])
+    public function update($table, $id, $fields = [])
     {
-        $sql = "UPDATE {$table} SET ". implode('=?,', array_keys($fields)). "=? WHERE id=?";
-        $fields['id']=$id;
+        $sql = "UPDATE {$table} SET " . implode('=?,', array_keys($fields)) . "=? WHERE id=?";
+        $fields['id'] = $id;
 
-        if (!$this->query($sql, $fields)->error()){
+        if (!$this->query($sql, $fields)->error()) {
             return true;
         }
         return false;
