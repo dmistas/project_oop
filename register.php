@@ -1,29 +1,5 @@
 <?php
-session_start();
-
-require_once "includes\classes\Config.php";
-require_once "includes\classes\Database.php";
-require_once "includes\classes\Validate.php";
-require_once "includes\classes\Input.php";
-require_once "includes\classes\Token.php";
-require_once "includes\classes\Session.php";
-require_once "includes\classes\User.php";
-require_once "includes\classes\Redirect.php";
-
-
-
-$GLOBALS['config'] = [
-    'mysql' => [
-        'host' => 'localhost',
-        'username' => 'root',
-        'password' => '',
-        'database' => 'projectc',
-    ],
-    'session' => [
-        'token_name' => 'token',
-    ],
-
-];
+require_once 'init.php';
 
 if (Input::exist()) {
     if (Token::check(Input::get('token'))) {
@@ -34,6 +10,10 @@ if (Input::exist()) {
                 'required' => true,
                 'min' => 2,
                 'max' => 15,
+            ],
+            'email' => [
+                'required' => true,
+                'email' => true,
                 'unique' => 'users'
             ],
             'password' => [
@@ -47,8 +27,6 @@ if (Input::exist()) {
         ]);
 
         if ($validation) {
-//            echo 'passed';
-
             $pass = password_hash(Input::get('password'), PASSWORD_DEFAULT);
             $user = new User();
             $user->createUser([
@@ -76,6 +54,10 @@ if (Input::exist()) {
     <div class="field">
         <label for="username">Username</label>
         <input type="text" id="username" name="username" value="<?= Input::get('username'); ?>">
+    </div>
+    <div class="field">
+        <label for="username">email</label>
+        <input type="email" id="email" name="email" value="<?= Input::get('email'); ?>">
     </div>
 
     <div class="field">
