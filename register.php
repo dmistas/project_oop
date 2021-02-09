@@ -1,13 +1,15 @@
 <?php
 session_start();
 
-require_once "classes\Config.php";
-require_once "classes\Database.php";
-require_once "classes\Validate.php";
-require_once "classes\Input.php";
-require_once "classes\Token.php";
-require_once "classes\Session.php";
-require_once "classes\User.php";
+require_once "includes\classes\Config.php";
+require_once "includes\classes\Database.php";
+require_once "includes\classes\Validate.php";
+require_once "includes\classes\Input.php";
+require_once "includes\classes\Token.php";
+require_once "includes\classes\Session.php";
+require_once "includes\classes\User.php";
+require_once "includes\classes\Redirect.php";
+
 
 
 $GLOBALS['config'] = [
@@ -54,7 +56,7 @@ if (Input::exist()) {
                 'password' => $pass,
             ]);
             Session::flash('success', 'Register success');
-            header('Location: test.php');
+            Redirect::to('test.php');
             exit();
         } else {
             foreach ($validate->getErrors() as $error) {
