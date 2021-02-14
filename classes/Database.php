@@ -8,7 +8,7 @@ class Database
     private function __construct()
     {
         try {
-            $this->pdo = new PDO("mysql:host=" . Config::getConfigItem('mysql.host') . ";dbname=" . Config::getConfigItem('mysql.database'), Config::getConfigItem('mysql.username'), Config::getConfigItem('mysql.password'));
+            $this->pdo = new PDO("mysql:host=" . Config::get('mysql.host') . ";dbname=" . Config::get('mysql.database'), Config::get('mysql.username'), Config::get('mysql.password'));
         } catch (PDOException $exception) {
             echo "Невозможно установить соединение с БД" . $exception->getMessage();
         }
@@ -55,7 +55,7 @@ class Database
             $value = $where[2];
 
             if (in_array($operator, $operators)) {
-                $sql = "{$action} FROM {$table} WHERE {$field}  {$operator}  ?";
+                $sql = "{$action} FROM `{$table}` WHERE {$field}  {$operator}  ?";
                 if (!$this->query($sql, [$value])->error()) {
                     return $this;
                 }
@@ -78,6 +78,14 @@ class Database
         return false;
     }
 
+    /**
+     * Обновление записи в таблице $table по id = $id, значения ['field_name'=>'new_value']
+     *
+     * @param $table
+     * @param $id
+     * @param array $fields
+     * @return bool
+     */
     public function update($table, $id, $fields = [])
     {
         $sql = "UPDATE {$table} SET " . implode('=?,', array_keys($fields)) . "=? WHERE id=?";
@@ -121,6 +129,9 @@ class Database
      */
     public function first()
     {
-        return $this->results()[0];
+        if ($this->results()){
+            return $this->results()[0];
+        }
+        return false;
     }
 }

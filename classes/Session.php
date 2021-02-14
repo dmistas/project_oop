@@ -21,7 +21,7 @@ class Session
      * @param $name
      * @return bool
      */
-    public static function exist($name)
+    public static function exists($name)
     {
         return isset($_SESSION[$name]);
     }
@@ -31,9 +31,9 @@ class Session
      *
      * @param string $name
      */
-    public static function delete(string $name)
+    public static function delete(string $name):void
     {
-        if (self::exist($name)) {
+        if (self::exists($name)) {
             unset($_SESSION[$name]);
         }
     }
@@ -59,7 +59,7 @@ class Session
      */
     public static function flash(string $name, string $string = '')
     {
-        if (self::exist($name) && self::get($name) !== '') {
+        if (self::exists($name) && self::get($name) !== '') {
             $session = self::get($name);
             self::delete($name);
             return $session;

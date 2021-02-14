@@ -8,7 +8,7 @@ class Config
      *
      * @return string|false
      */
-    public static function getConfigItem($path=null)
+    public static function get($path=null)
     {
         $config = $GLOBALS['config'];
         if (!$path){

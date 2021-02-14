@@ -1,17 +1,18 @@
 <?php
-include "classes/Database.php";
-include "classes/Config.php";
+require_once 'init.php';
 
-$GLOBALS['config'] = [
-    'mysql'=>[
-        'host'=>'localhost',
-        'username'=>'root',
-        'password'=>'',
-        'database'=>'project',
-    ]
+echo "<div>".Session::flash('success')."</div>";
 
-];
+$user = new User();
 
-$users = Database::getInstance();
-$users->query('SELECT * FROM users');
-var_dump($users);
+if ($user->isLoggedIn()) {
+    echo "Hi! {$user->getData()->username}<br>";
+    echo "<a href='logout.php'>Logout</a><br>";
+    echo "<a href='changepassword.php'>Change password</a><br>";
+    echo "<a href='update.php'>Update profile</a><br>";
+    if ($user->hasPermissions('moderator')){
+        echo "You are moderator!";
+    }
+} else {
+    echo "<a href='login.php'>Login</a> or  <a href='register.php'>Register</a>";
+}

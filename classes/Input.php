@@ -10,7 +10,7 @@ class Input
      * @return bool
      *
      */
-    public static function exist($type = "post")
+    public static function exists($type = "post")
     {
         switch ($type) {
             case 'post':

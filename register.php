@@ -1,7 +1,7 @@
 <?php
 require_once 'init.php';
 
-if (Input::exist()) {
+if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
         $validate = new Validate();
 
@@ -30,6 +30,7 @@ if (Input::exist()) {
             $pass = password_hash(Input::get('password'), PASSWORD_DEFAULT);
             $user = new User();
             $user->createUser([
+                'email' => Input::get('email'),
                 'username' => Input::get('username'),
                 'password' => $pass,
             ]);

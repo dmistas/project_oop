@@ -22,7 +22,7 @@ $GLOBALS['config'] = [
 
 ];
 
-if (Input::exist()) {
+if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
         $validate = new Validate();
 

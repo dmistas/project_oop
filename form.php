@@ -14,7 +14,7 @@ $GLOBALS['config'] = [
 
 ];
 
-if (Input::exist()) {
+if (Input::exists()) {
     $validate = new Validate();
 
     $validation = $validate->check($_POST, [
