@@ -1,10 +1,13 @@
 <?php
 require_once 'init.php';
-
 if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
-        $validate = new Validate();
 
+        if (!Input::get('checkbox')){
+            Session::flash('danger', 'Необходимо принять правила сайта');
+        }
+
+        $validate = new Validate();
         $validation = $validate->check($_POST, [
             'username' => [
                 'required' => true,
@@ -26,56 +29,98 @@ if (Input::exists()) {
             ],
         ]);
 
-        if ($validation) {
+        if ($validation && Input::get('checkbox')) {
             $pass = password_hash(Input::get('password'), PASSWORD_DEFAULT);
             $user = new User();
             $user->createUser([
                 'email' => Input::get('email'),
                 'username' => Input::get('username'),
                 'password' => $pass,
+                'date' => date('Y-m-d'),
             ]);
-            Session::flash('success', 'Register success');
-            Redirect::to('test.php');
+            Session::flash('success', 'Регистрация успешна');
+            Redirect::to('login.php');
             exit();
-        } else {
-            foreach ($validate->getErrors() as $error) {
-                echo $error . "<br>";
-            }
+        } elseif (!$validation) {
+            $errors = $validate->getErrors();
         }
     }
 }
 
 
 ?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Register</title>
 
-<form action="" method="post" enctype="multipart/form-data">
-    <div class="flash">
-        <?= Session::flash('success') ?>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Custom styles for this template -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+<form class="form-signin" method="post" enctype="multipart/form-data" action="">
+    <img class="mb-4" src="images/apple-touch-icon.png" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Регистрация</h1>
+
+    <?php
+    if (isset($errors)):
+        ?>
+        <div class="alert alert-danger">
+            <ul>
+                <?php
+                foreach ($errors as $error):
+                    ?>
+                    <li><?= $error ?></li>
+                <?php
+                endforeach;
+                ?>
+            </ul>
+        </div>
+    <?php
+    endif;
+    ?>
+    <?php if (Session::exists('success')): ?>
+        <div class="alert alert-success"><?= Session::flash('success') ?></div>
+    <?php endif; ?>
+
+    <?php if (Session::exists('danger')): ?>
+        <div class="alert alert-danger"><?= Session::flash('danger') ?></div>
+    <?php endif; ?>
+
+    <div class="form-group">
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+               value="<?= Input::get('email') ?>">
     </div>
-    <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" value="<?= Input::get('username'); ?>">
+    <div class="form-group">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Ваше имя"
+               value="<?= Input::get('username') ?>">
     </div>
-    <div class="field">
-        <label for="username">email</label>
-        <input type="email" id="email" name="email" value="<?= Input::get('email'); ?>">
+    <div class="form-group">
+        <input type="password" class="form-control" id="password" name="password" placeholder="Пароль">
     </div>
 
-    <div class="field">
-        <label for="">Password</label>
-        <input type="text" name="password" value="">
-    </div>
-
-    <div class="field">
-        <label for="">Password again</label>
-        <input type="text" name="password_again" value="">
+    <div class="form-group">
+        <input type="password" class="form-control" id="password_again" name="password_again"
+               placeholder="Повторите пароль">
     </div>
 
     <div class="field">
         <input type="hidden" name="token" value="<?= Token::generate(); ?>">
     </div>
 
-    <div class="field">
-        <button type="submit">Submit</button>
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox" name="checkbox"> Согласен со всеми правилами
+        </label>
     </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2017-2021</p>
 </form>
+</body>
+</html>
