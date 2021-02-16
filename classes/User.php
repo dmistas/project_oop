@@ -19,7 +19,7 @@ class User
                 }
             }
         } else {
-            $this->find($id);
+            $this->find(intval($id));
         }
     }
 
@@ -131,7 +131,7 @@ class User
      */
     public function hasPermissions(string $key=null)
     {
-        if ($this->isLoggedIn() && $key){
+        if ($key){
             $group = $this->db->get('groups', ['id', '=', $this->getData()->group_id]);
             if ($group->count()){
                 $permissions = $group->first()->permissions;

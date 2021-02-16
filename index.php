@@ -59,7 +59,7 @@ $user = new User();
                     <tr>
                         <td><?= $i ?></td>
                         <td><?= $single_user->id ?></td>
-                        <?php if ($user->hasPermissions('admin') || $single_user->id == $login_user_id ): ?>
+                        <?php if ($single_user->id == $login_user_id ): ?>
                         <td class="alert alert-info"><a href="profile.php"><?= $single_user->username?></a></td>
                         <?php else: ?>
                         <td><a href="user_profile.php?id=<?=$single_user->id?>"><?= $single_user->username?></a></td>

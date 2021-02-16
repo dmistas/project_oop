@@ -8,11 +8,11 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" href="index.php">Главная</a>
+                <a class="nav-link" href="../index.php">Главная</a>
             </li>
-            <?php if($user->isLoggedIn() && $user->hasPermissions('admin')): ?>
+            <?php if($user->hasPermissions('admin')): ?>
             <li class="nav-item">
-                <a class="nav-link" href="users/index.php">Управление пользователями</a>
+                <a class="nav-link" href="index.php">Управление пользователями</a>
             </li>
             <?php endif; ?>
         </ul>
@@ -21,18 +21,18 @@
 
             <?php if (!($user->isLoggedIn())): ?>
                 <li class="nav-item">
-                    <a href="login.php" class="nav-link">Войти</a>
+                    <a href="../login.php" class="nav-link">Войти</a>
                 </li>
                 <li class="nav-item">
-                    <a href="register.php" class="nav-link">Регистрация</a>
+                    <a href="../register.php" class="nav-link">Регистрация</a>
                 </li>
             <?php endif; ?>
             <?php if ($user->isLoggedIn()): ?>
                 <li class="nav-item">
-                    <a href="profile.php" class="nav-link">Профиль</a>
+                    <a href="../profile.php" class="nav-link">Профиль</a>
                 </li>
                 <li class="nav-item">
-                    <a href="logout.php" class="nav-link">Выйти</a>
+                    <a href="../logout.php" class="nav-link">Выйти</a>
                 </li>
             <?php endif; ?>
 
